@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <title>Video Streaming Demonstration</title>
+      <script src="/static/jquery-3.2.1.min.js"></script>
+      <script>
+
+          function save()
+          {
+              var save_val = $("#save_bnt").val();
+              var flag = 1;
+              if (save_val == "不保存")
+                flag = 0;
+
+
+              $.post("/set",{save:flag},function(data, textStatus, jqXHR){
+                    if (save_val == "保存")
+                        $("#save_bnt").val("不保存");
+                    else
+                        $("#save_bnt").val("保存");
+              });
+
+          }
+
+      </script>
+  </head>
+  <body>
+    <h1>Video Streaming Demonstration</h1>
+    <img src="{{ url_for('video_feed') }}">
+    <!--Many images ('video_fee' pictures set 图片请求地址，图片也是一种资源，内容是从src_url获取的，浏览器发请求到服务端获取图片-->
+    <!--路由到 video_feed，传的用户名知道保存状态，传进去才知道状态 session放到死循环里会报错。每次while循环通过username知道是否保存-->
+    {% if save_status%}
+        <input type="button" value="不保存" class="bn" onclick="save()" id="save_bnt"/>
+    {% else %}
+        <input type="button" value="保存" class="bn" onclick="save()" id="save_bnt"/>
+    {%  endif %}
+  </body>
+</html>
